@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "358431220438",
+    "firebase_url": "https://stoplichtapp-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "stoplichtapp",
+    "storage_bucket": "stoplichtapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358431220438:android:4cb54661f2070ef87d5f77",
+        "android_client_info": {
+          "package_name": "nl.ratic.stoplicht"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358431220438-08um93uu643sg6tb0bi056o387j5l7d9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP1s8bff5kKY5IfCE_PEc40DC9tApadSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358431220438-08um93uu643sg6tb0bi056o387j5l7d9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
