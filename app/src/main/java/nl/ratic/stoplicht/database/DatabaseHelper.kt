@@ -103,7 +103,6 @@ class DatabaseHelper : SQLiteOpenHelper {
                 voteCursor.getString(voteCursor.getColumnIndex(DatabaseInfo.VoteColumns.USERID))
             val vote =
                 Vote.valueOf(voteCursor.getString(voteCursor.getColumnIndex(DatabaseInfo.VoteColumns.VOTE)))
-            Log.d(meetingid, vote.toString())
             if (voteHashMap.containsKey(meetingid)) {
                 voteHashMap.getValue(meetingid)[userid] = vote
             } else {
@@ -180,7 +179,6 @@ class DatabaseHelper : SQLiteOpenHelper {
                 voteCursor.getString(voteCursor.getColumnIndex(DatabaseInfo.VoteColumns.USERID))
             val vote =
                 Vote.valueOf(voteCursor.getString(voteCursor.getColumnIndex(DatabaseInfo.VoteColumns.VOTE)))
-            Log.d(meetingid, vote.toString())
             if (voteHashMap.containsKey(meetingid)) {
                 voteHashMap.getValue(meetingid)[userid] = vote
             } else {
@@ -191,7 +189,6 @@ class DatabaseHelper : SQLiteOpenHelper {
         val meetings = mutableListOf<Meeting>()
         while (meetingCursor.moveToNext()) {
 
-            Log.d("getMeetings", "hasnext")
             val meetingName =
                 meetingCursor.getString(meetingCursor.getColumnIndex(DatabaseInfo.MeetingColumns.NAME))
             val meetingDescription =

@@ -11,7 +11,6 @@ data class SimpleDate(var year : Int = 1970, var month : Int = 1, var day : Int 
 
     fun getDateFormatted() : String {
         if (dateFormatted.isEmpty()){
-            Log.d("getFormattedDate", "running")
             var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
             var date = LocalDate.of(year,month,day)
             return date.format(formatter)

@@ -66,6 +66,10 @@ class MeetingListActivity : AppCompatActivity(), MeetingClickedListener {
         recyclerView.layoutManager = layoutManager
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = meetingsAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
         prepareMeetingsData()
     }
 
@@ -114,7 +118,6 @@ class MeetingListActivity : AppCompatActivity(), MeetingClickedListener {
         meetingList.clear()
         val dbRef = DatabaseHelper.getHelper(this)
         meetingList.addAll(dbRef.getMeetings())
-        Log.d("meetingList",meetingList.toString())
         meetingsAdapter.notifyDataSetChanged()
     }
 
