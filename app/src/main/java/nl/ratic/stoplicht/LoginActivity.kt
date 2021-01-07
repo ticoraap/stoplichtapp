@@ -76,13 +76,12 @@ class LoginActivity : AppCompatActivity() {
         showSpinner()
         val username = findViewById<EditText>(R.id.username).text.toString()
         val password = findViewById<EditText>(R.id.password).text.toString()
-        Api.authentication.login(username, password) {
-            if(it){
+        Api.authentication.login(username, password) { isSuccessful, errorMessage ->
+            if(isSuccessful){
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             } else {
-//                Snackbar.make(this.findViewById(android.R.id.content), "Authenticatie niet gelukt", Snackbar.LENGTH_LONG).setAction("", null).show();
-                Toast.makeText(this,"authenticatie niet gelukt",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show()
                 hideSpinner()
             }
         }

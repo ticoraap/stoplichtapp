@@ -15,9 +15,9 @@ class Authentication {
         return authIntance.currentUser != null
     }
 
-    fun login(email: String, password: String, callBack: (Boolean) -> Unit) {
+    fun login(email: String, password: String, callBack: (Boolean, String) -> Unit) {
         authIntance.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            callBack(it.isSuccessful)
+            callBack(it.isSuccessful, it.exception.toString())
         }
     }
 

@@ -8,35 +8,23 @@
 
     <TextView
         android:id="@+id/meetingName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_width="320dp"
+        android:layout_height="102dp"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
         android:text="Meeting name"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/meetingName2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="@string/vote_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/meetingDescription"
-        android:layout_width="263dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="132dp"
+        android:layout_width="320dp"
+        android:layout_height="108dp"
+        android:layout_marginTop="140dp"
         android:text="Description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,8 +61,8 @@
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/dark_green"
         android:onClick="voteOnGreen"
-        android:textColor="@color/grey"
         android:padding="10dp"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,8 +74,8 @@
         android:layout_height="60dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="@color/dark_orange"
-        android:textColor="@color/grey"
         android:onClick="voteOnOrange"
+        android:textColor="@color/grey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,9 +85,9 @@
         android:id="@+id/button5"
         android:layout_width="33dp"
         android:layout_height="294dp"
-        android:enabled="false"
         android:layout_marginTop="512dp"
         android:backgroundTint="@color/black"
+        android:enabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.264"
         app:layout_constraintStart_toStartOf="parent"

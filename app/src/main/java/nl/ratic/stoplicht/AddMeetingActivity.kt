@@ -1,7 +1,6 @@
 package nl.ratic.stoplicht
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
@@ -31,14 +30,13 @@ class AddMeetingActivity : AppCompatActivity() {
             val datePicker: DatePicker = findViewById(R.id.meetingDatePicker)
             val userid = Api.authentication.currentUser()!!.uid
             val meeting =
-                Meeting(name, description, simpleDate = getSimpleDate(datePicker), userid = userid)
+                Meeting(name, description, simpleDate = getSimpleDateFromDatePicker(datePicker), userid = userid)
             Api.meetings.add(meeting) {
                 if (it) {
-                    val intent = Intent(this, MainActivity::class.java)
                     Toast.makeText(this, "Created ${meeting.description}", Toast.LENGTH_LONG).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "failed creating meeting", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Failed creating meeting", Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -47,11 +45,10 @@ class AddMeetingActivity : AppCompatActivity() {
         }
     }
 
-    private fun getSimpleDate(datePicker: DatePicker) : SimpleDate {
+    private fun getSimpleDateFromDatePicker(datePicker: DatePicker) : SimpleDate {
         val day = datePicker.dayOfMonth
         val month = datePicker.month +1
         val year = datePicker.year
-        val simpleDate = SimpleDate(year,month,day)
-        return simpleDate
+        return SimpleDate(year,month,day)
     }
 }
