@@ -17,7 +17,7 @@ class Authentication {
 
     fun login(email: String, password: String, callBack: (Boolean, String) -> Unit) {
         authIntance.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-            callBack(it.isSuccessful, it.exception.toString())
+            callBack(it.isSuccessful, it.exception?.message ?: "Unknown authentication error")
         }
     }
 

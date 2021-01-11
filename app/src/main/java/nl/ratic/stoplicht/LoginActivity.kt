@@ -15,7 +15,6 @@ import androidx.core.widget.addTextChangedListener
 import nl.ratic.stoplicht.api.Api
 
 
-
 class LoginActivity : AppCompatActivity() {
 
     private final val LOGTAG = "LoginActivity"

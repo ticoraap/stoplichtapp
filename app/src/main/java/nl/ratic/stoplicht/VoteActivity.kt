@@ -39,10 +39,6 @@ class VoteActivity : AppCompatActivity() {
         voteRedButton = findViewById(R.id.voteRed)
         meetingid = intent.extras?.getString("meetingid").toString()
         prepareMeetingData()
-        Log.d(
-            "VoteActivity onCreate",
-            DatabaseHelper.getHelper(this).getMeeting(meetingid).toString()
-        )
     }
 
 

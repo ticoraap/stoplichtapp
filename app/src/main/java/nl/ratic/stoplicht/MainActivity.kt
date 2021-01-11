@@ -52,15 +52,23 @@ class MainActivity : AppCompatActivity() {
         welcomeTextView = findViewById(R.id.mainWelcomeText)
         if (Api.authentication.isAuthenticated()){
             loginButton.isEnabled = false
+            loginButton.visibility = View.GONE
             logoutButton.isEnabled = true
+            logoutButton.visibility = View.VISIBLE
             meetingsButton.isEnabled = true
+            meetingsButton.visibility = View.VISIBLE
             addMeetingButton.isEnabled = true
+            addMeetingButton.visibility = View.VISIBLE
             welcomeTextView.text = Api.authentication.currentUser()!!.email
         } else {
             loginButton.isEnabled = true
+            loginButton.visibility = View.VISIBLE
             logoutButton.isEnabled = false
+            logoutButton.visibility = View.GONE
             meetingsButton.isEnabled = false
+            meetingsButton.visibility = View.GONE
             addMeetingButton.isEnabled = false
+            addMeetingButton.visibility = View.GONE
             welcomeTextView.text = resources.getString(R.string.main_textview_welcome_messgae)
         }
     }
