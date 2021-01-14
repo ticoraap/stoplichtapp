@@ -18,7 +18,6 @@ class Meetings {
         meetingsRef.child(meetingid).setValue(meeting).addOnCompleteListener {
             callBack(it.isSuccessful)
         }
-
     }
 
     fun get(UUID: String, callBackSuccess: ((Meeting) -> Unit), callBackFailed: (() -> Unit)) {

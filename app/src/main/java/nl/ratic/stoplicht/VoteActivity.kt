@@ -2,7 +2,6 @@ package nl.ratic.stoplicht
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -32,12 +31,13 @@ class VoteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vote)
 
+        meetingid = intent.extras?.getString("meetingid").toString()
+
         name = findViewById(R.id.meetingName)
         description = findViewById(R.id.meetingDescription)
         voteGreenButton = findViewById(R.id.voteGreen)
         voteOrangeButton = findViewById(R.id.voteOrange)
         voteRedButton = findViewById(R.id.voteRed)
-        meetingid = intent.extras?.getString("meetingid").toString()
         prepareMeetingData()
     }
 
@@ -58,7 +58,7 @@ class VoteActivity : AppCompatActivity() {
                 setMeetingData(it)
             },
             callBackFailed = {
-                Toast.makeText(this, "Could not retreive meetings from the API", Toast.LENGTH_LONG)
+                Toast.makeText(this, "Could not get meetings from the API", Toast.LENGTH_LONG).show()
             })
     }
 

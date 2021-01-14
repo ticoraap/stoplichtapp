@@ -17,7 +17,6 @@ import nl.ratic.stoplicht.api.Api
 
 class LoginActivity : AppCompatActivity() {
 
-    private final val LOGTAG = "LoginActivity"
     private var isValidEmail : Boolean = false
     private var isValidPassword : Boolean = false
 
@@ -26,25 +25,26 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val username = findViewById<EditText>(R.id.username)
-        username.addTextChangedListener(){
+        val usernameEditText = findViewById<EditText>(R.id.username)
+        val passwordEditText = findViewById<EditText>(R.id.password)
 
-            fun Editable.isValidEmail() : Boolean{
-                return !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
-            }
-            isValidEmail = it?.isValidEmail() ?: false
-            checkBothInput()
+        usernameEditText.addTextChangedListener(){
+            checkUsernameInput(it)
         }
 
-        val password = findViewById<EditText>(R.id.password)
-        password.addTextChangedListener(){
-            fun Editable.isValidPassword() : Boolean{
-                return !isNullOrEmpty() && trimmedLength() >= 6
-            }
-
-            isValidPassword = it?.isValidPassword() ?: false
-            checkBothInput()
+        passwordEditText.addTextChangedListener(){
+            checkPasswordInput(it)
         }
+    }
+
+    private fun checkUsernameInput(editable: Editable?){
+        isValidEmail = editable?.isValidEmail() ?: false
+        checkBothInput()
+    }
+
+    private fun checkPasswordInput(editable: Editable?){
+        isValidPassword = editable?.isValidPassword() ?: false
+        checkBothInput()
     }
 
     private fun checkBothInput(){
@@ -66,6 +66,7 @@ class LoginActivity : AppCompatActivity() {
         val loadAnimation = findViewById<ProgressBar>(R.id.loading)
         loadAnimation.visibility = View.VISIBLE;
     }
+
     private fun hideSpinner(){
         val loadAnimation = findViewById<ProgressBar>(R.id.loading)
         loadAnimation.visibility = View.INVISIBLE;
@@ -76,17 +77,22 @@ class LoginActivity : AppCompatActivity() {
         val username = findViewById<EditText>(R.id.username).text.toString()
         val password = findViewById<EditText>(R.id.password).text.toString()
         Api.authentication.login(username, password) { isSuccessful, errorMessage ->
+            hideSpinner()
             if(isSuccessful){
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                finish()
             } else {
                 Toast.makeText(this,errorMessage,Toast.LENGTH_LONG).show()
-                hideSpinner()
             }
         }
     }
 
+    fun Editable.isValidEmail() : Boolean{
+        return !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
+    }
 
+    fun Editable.isValidPassword() : Boolean{
+        return !isNullOrEmpty() && trimmedLength() >= 6
+    }
 
 
 }

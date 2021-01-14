@@ -2,7 +2,6 @@ package nl.ratic.stoplicht
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.DatePicker
 import android.widget.ProgressBar
@@ -21,10 +20,12 @@ import nl.ratic.stoplicht.model.SimpleDate
 class MeetingListActivity : AppCompatActivity(), MeetingClickedListener {
 
     private var meetingList: MutableList<Meeting> = mutableListOf()
+    private var filterOnDay = false
+
     private lateinit var meetingsAdapter: MeetingsAdapter
     private lateinit var datePicker: DatePicker
-    private var filterOnDay = false
     private lateinit var recyclerView: RecyclerView
+    private lateinit var filterDaySwitch : Switch
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,30 +33,19 @@ class MeetingListActivity : AppCompatActivity(), MeetingClickedListener {
         setContentView(R.layout.activity_meeting_list)
 
         recyclerView = findViewById(R.id.recyclerView)
-
         datePicker = findViewById(R.id.meetingDatePicker)
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        filterDaySwitch = findViewById(R.id.filterDaySwitch)
 
-        datePicker.setOnDateChangedListener { view, year, monthOfYear, dayOfMonth ->
-            filterMeetingListWith(getSimpleDateFromDatepicker())
+        datePicker.setOnDateChangedListener { _, _, _, _ ->
+            filterMeetingList(getSimpleDateFromDatepicker())
         }
 
-        val filterDaySwitch: Switch = findViewById(R.id.filterDaySwitch)
-        filterDaySwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        filterDaySwitch.setOnCheckedChangeListener { _, isChecked ->
             filterOnDay = isChecked
             if (isChecked) {
-
-                val scale: Float = applicationContext.resources.displayMetrics.density
-                val pixels = (500 * scale + 0.5f)
-                recyclerView.layoutParams.height = pixels.toInt()
-                datePicker.visibility = View.VISIBLE
-                filterMeetingListWith(getSimpleDateFromDatepicker())
+                showDatePicker()
             } else {
-                val scale: Float = applicationContext.resources.displayMetrics.density
-                val pixels = (600 * scale + 0.5f)
-                recyclerView.layoutParams.height = pixels.toInt()
-                datePicker.visibility = View.GONE
-                meetingsAdapter.filter.filter("")
+                hideDatePicker()
             }
             datePicker.requestLayout()
         }
@@ -70,47 +60,45 @@ class MeetingListActivity : AppCompatActivity(), MeetingClickedListener {
 
     override fun onResume() {
         super.onResume()
-        prepareMeetingsData()
+        loadLatestMeetingData()
     }
 
-    private fun getSimpleDateFromDatepicker(): SimpleDate {
-        val simpleDate = SimpleDate(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
-        return simpleDate
+    private fun showDatePicker(){
+        val scale: Float = applicationContext.resources.displayMetrics.density
+        val pixels = (500 * scale + 0.5f)
+        recyclerView.layoutParams.height = pixels.toInt()
+        datePicker.visibility = View.VISIBLE
+        filterMeetingList(getSimpleDateFromDatepicker())
     }
 
-    private fun filterMeetingListWith(simpleDate: SimpleDate) {
-        if (filterOnDay) {
-            meetingsAdapter.filter.filter(simpleDate.getDateFormatted())
-        } else {
-            clearFilterConstraint()
-        }
-    }
-
-    private fun clearFilterConstraint() {
+    private fun hideDatePicker(){
+        val scale: Float = applicationContext.resources.displayMetrics.density
+        val pixels = (600 * scale + 0.5f)
+        recyclerView.layoutParams.height = pixels.toInt()
+        datePicker.visibility = View.GONE
         meetingsAdapter.filter.filter("")
     }
 
-    private fun prepareMeetingsData() {
-        setSpinnerVisibility(true)
+    private fun getSimpleDateFromDatepicker(): SimpleDate {
+        return SimpleDate(datePicker.year, datePicker.month + 1, datePicker.dayOfMonth)
+    }
+
+    private fun filterMeetingList(simpleDate: SimpleDate) {
+        if (filterOnDay) {
+            meetingsAdapter.filter.filter(simpleDate.getDateFormatted())
+        } else {
+            meetingsAdapter.filter.filter("")
+        }
+    }
+
+    private fun loadLatestMeetingData() {
+        showSpinner()
         if (Connectivity.isInternetAvailable(this)){
             getMeetingsFromApi()
         } else {
             getMeetingsFromDatabase()
         }
-        setSpinnerVisibility(false)
-    }
-
-    private fun getMeetingsFromApi(){
-        Api.meetings.getAll(
-            callBackSuccess = {
-                meetingList.clear()
-                meetingList.addAll(it)
-                meetingsAdapter.notifyDataSetChanged()
-                addMeetingsToDatabase()
-            },
-            callBackFailed = {
-                Toast.makeText(this,"Could not retreive meetings from the API", Toast.LENGTH_LONG)
-            })
+        hideSpinner()
     }
 
     private fun getMeetingsFromDatabase(){
@@ -121,27 +109,43 @@ class MeetingListActivity : AppCompatActivity(), MeetingClickedListener {
         meetingsAdapter.notifyDataSetChanged()
     }
 
+    private fun getMeetingsFromApi(){
+        Api.meetings.getAll(
+            callBackSuccess = {
+                refreshMeetingsOnDevice(it)
+            },
+            callBackFailed = {
+                Toast.makeText(this,"Could not retreive meetings from the API", Toast.LENGTH_LONG).show()
+            })
+    }
 
+    private fun refreshMeetingsOnDevice(meetings : List<Meeting>){
+        meetingList.clear()
+        meetingList.addAll(meetings)
+        meetingsAdapter.notifyDataSetChanged()
+        flushAndAddMeetingsToDatabase(meetings)
+    }
 
-    private fun addMeetingsToDatabase(){
-        val dbHelper: DatabaseHelper = DatabaseHelper.getHelper(this)!!
+    private fun flushAndAddMeetingsToDatabase(meetings : List<Meeting>){
+        val dbHelper: DatabaseHelper = DatabaseHelper.getHelper(this)
         dbHelper.clearOldMeetings()
-        dbHelper.insertMeetings(meetingList)
+        dbHelper.insertMeetings(meetings)
+    }
+
+    private fun showSpinner(){
+        val meetingListSpinner = findViewById<ProgressBar>(R.id.meetingListSpinner)
+        meetingListSpinner.visibility = View.VISIBLE
+    }
+
+    private fun hideSpinner(){
+        val meetingListSpinner = findViewById<ProgressBar>(R.id.meetingListSpinner)
+        meetingListSpinner.visibility = View.GONE
     }
 
     override fun clickedOnMeeting(meeting: Meeting) {
         val intent = Intent(this, VoteActivity::class.java)
         intent.putExtra("meetingid", meeting.meetingid)
         startActivity(intent)
-    }
-
-    private fun setSpinnerVisibility(shouldSpin: Boolean){
-        val meetingListSpinner : ProgressBar = findViewById(R.id.meetingListSpinner)
-        if (shouldSpin){
-            meetingListSpinner.visibility = View.VISIBLE
-        } else {
-            meetingListSpinner.visibility = View.GONE
-        }
     }
 }
 
